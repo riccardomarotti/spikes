@@ -13,6 +13,7 @@ var createScene = function () {
                                                 new BABYLON.Vector3(0, 0, 0), 
                                                 scene3D);
     camera3D.attachControl(canvas3D, true, true , true);
+    camera3D.inputs.remove(camera3D.inputs.attached.keyboard);
 
     var light3D = new BABYLON.HemisphericLight("light3D", new BABYLON.Vector3(1, 0, 0), scene3D);
     light3D.intensity = 0.7;
