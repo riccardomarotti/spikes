@@ -76,7 +76,7 @@ var createScene = function () {
 
     var target2D = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
     var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene2D);
-    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.7);
+    var targetColor = new BABYLON.Color3(0.1, 0.6, 0.5);
     targetMaterial.emissiveColor = targetColor;
     target2D.material = targetMaterial;
     target2D.rotation.z = Math.PI/2;
