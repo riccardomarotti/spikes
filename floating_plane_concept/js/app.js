@@ -1,7 +1,7 @@
 /// <reference path="babylon.2.5.d.ts" />
 
 var createScene = function () {
-    var keys = [];
+    var movementForKeycode = [];
     var canvas3D = document.getElementById('canvas3D');
     var engine3D = new BABYLON.Engine(canvas3D, true);
     var scene3D = new BABYLON.Scene(engine3D);
@@ -46,39 +46,30 @@ var createScene = function () {
         scene3D.render();
     });
 
-    var plane2D = null;
-    var cylinder2D = null;
-    var blackMaterial = new BABYLON.StandardMaterial("mat", scene2D);
-    blackMaterial.specularColor = new BABYLON.Vector3(0,0,0);
+    var cylynder2DMaterial = new BABYLON.StandardMaterial("mat", scene2D);
+    cylynder2DMaterial.specularColor = new BABYLON.Vector3(0,0,0);
+
     scene3D.registerAfterRender(function () {
-        if(plane2D) {
-            plane2D.dispose();
-        }
-        if(cylinder2D) {
-            cylinder2D.dispose();
-        }
+        plane3D.position.x -= movementForKeycode[65] || 0;
+        camera2D.target.x -= movementForKeycode[65] || 0;
 
-        if(keys[65]) {
-            plane3D.position.x -= 0.02;
-            camera2D.target.x -= 0.02;
-        }
-
-        if(keys[68]) {
-            plane3D.position.x += 0.02;
-            camera2D.target.x += 0.02;
-        }
+        plane3D.position.x += movementForKeycode[68] || 0;
+        camera2D.target.x += movementForKeycode[68] || 0;
 
         var plane2Dtemp = BABYLON.CSG.FromMesh(plane3D);
         var cylinder2Dtemp = BABYLON.CSG.FromMesh(cylinder3D);
         var intersection =  plane2Dtemp.intersect(cylinder2Dtemp);
         
-        cylinder2D = intersection.toMesh("intersection", blackMaterial, scene2D);
+        var cylinder2D = intersection.toMesh("intersection", cylynder2DMaterial, scene2D);
+        
         var planeMaterial2D = new BABYLON.StandardMaterial("plane2DMaterial", scene2D);
         planeMaterial2D.diffuseColor = new BABYLON.Color3(0.5, 1, 1);
-        plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
+        var plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
         plane2D.position.x -= 0.01;
         
         scene2D.render();
+        plane2D.dispose();
+        cylinder2D.dispose();
     });
 
     window.addEventListener('resize', function () {
@@ -86,9 +77,9 @@ var createScene = function () {
     });
 
     window.addEventListener("keydown", function(evt) {
-        keys[evt.keyCode] = true
+        movementForKeycode[evt.keyCode] = 0.02;
     });
     window.addEventListener("keyup", function(evt) {
-        keys[evt.keyCode] = false
+        movementForKeycode[evt.keyCode] = 0;
     });
 };
