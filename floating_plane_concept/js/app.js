@@ -27,7 +27,7 @@ var createScene = function () {
     light3D.intensity = 0.7;
 
     var cylinder3D = BABYLON.Mesh.CreateCylinder("cylinder", 6, 2, 2, 50, 1, scene3D, false);
-    var plane3D = BABYLON.MeshBuilder.CreateBox("box", {size: 5, width: 0.02}, scene3D);
+    var plane3D = BABYLON.MeshBuilder.CreateBox("box", {size: 5, width: 0.01}, scene3D);
 
 
     var planeMaterial = new BABYLON.StandardMaterial("transparent", scene3D);
