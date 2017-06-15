@@ -126,6 +126,11 @@ var createScene = function () {
             player2D.position.y = 0;
         }
 
+        if(!player2D.intersectsMesh(plane2D)) {
+            player2D.position.z = -2;
+            player2D.position.y = 0;
+        }
+
         if(player2D.intersectsPoint(target2D.position)) {
             engine3D.stopRenderLoop();
         }
