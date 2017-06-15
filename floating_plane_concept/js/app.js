@@ -68,7 +68,7 @@ var createScene = function () {
 
     var target = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
     var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene2D);
-    var targetColor = new BABYLON.Color3(0.4, 1, 0.4);
+    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.5);
     targetMaterial.diffuseColor = targetColor;
     target.material = targetMaterial;
     target.rotation.z = Math.PI/2;
@@ -110,6 +110,10 @@ var createScene = function () {
         if(cylinder2D && cylinder2D.intersectsMesh(player, false)) {
             player.position.z = -2;
             player.position.y = 0;
+        }
+
+        if(player.intersectsPoint(target.position)) {
+            engine3D.stopRenderLoop();
         }
 
         scene2D.render();
