@@ -1,7 +1,15 @@
 /// <reference path="babylon.2.5.d.ts" />
 
+var KEY_A = 65;
+var KEY_D = 68;
+var KEY_UP = 38;
+var KEY_DOWN = 40;
+var KEY_LEFT = 37;
+var KEY_RIGHT = 39;
+
 var createScene = function () {
-    var movementForKeycode = [];
+    var movementForKeycode3D = [];
+    var movementForKeycode2D = [];
     var canvas3D = document.getElementById('canvas3D');
     var engine3D = new BABYLON.Engine(canvas3D, true);
     var scene3D = new BABYLON.Scene(engine3D);
@@ -35,6 +43,14 @@ var createScene = function () {
     var light2D = new BABYLON.HemisphericLight("light2D", new BABYLON.Vector3(1, 1, 1), scene2D);
     light2D.intensity = 1;
 
+    var player = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene2D);
+    var playerMaterial = new BABYLON.StandardMaterial("playerColor", scene2D);
+    var playerColor = new BABYLON.Color3(1, 0.3, 0.4);
+    playerMaterial.diffuseColor = playerColor;
+    player.material = playerMaterial;
+    player.rotation.z = Math.PI/2;
+    player.position.z = -2;
+
     var camera2D = new BABYLON.ArcRotateCamera("ArcRotateCamera", 
                                                 0, 
                                                 1.5, 
@@ -43,6 +59,8 @@ var createScene = function () {
                                                 scene2D
                                                );
 
+
+    camera2D.attachControl(canvas2D, true, true , true);                                            
     engine3D.runRenderLoop(function () {
         scene3D.render();
     });
@@ -51,11 +69,19 @@ var createScene = function () {
     cylynder2DMaterial.specularColor = new BABYLON.Vector3(0,0,0);
 
     scene3D.registerAfterRender(function () {
-        plane3D.position.x -= movementForKeycode[65] || 0;
-        camera2D.target.x -= movementForKeycode[65] || 0;
+        plane3D.position.x -= movementForKeycode3D[KEY_A] || 0;
+        player.position.x -= movementForKeycode3D[KEY_A] || 0;
+        camera2D.target.x -= movementForKeycode3D[KEY_A] || 0;
+        
+        player.position.z -= movementForKeycode2D[KEY_LEFT] || 0;
+        player.position.y -= movementForKeycode2D[KEY_DOWN] || 0;
 
-        plane3D.position.x += movementForKeycode[68] || 0;
-        camera2D.target.x += movementForKeycode[68] || 0;
+        plane3D.position.x += movementForKeycode3D[KEY_D] || 0;
+        player.position.x += movementForKeycode3D[KEY_D] || 0;
+        camera2D.target.x += movementForKeycode3D[KEY_D] || 0;
+
+        player.position.z += movementForKeycode2D[KEY_RIGHT] || 0;
+        player.position.y += movementForKeycode2D[KEY_UP] || 0;
 
         var plane2Dtemp = BABYLON.CSG.FromMesh(plane3D);
         var cylinder2Dtemp = BABYLON.CSG.FromMesh(cylinder3D);
@@ -69,18 +95,22 @@ var createScene = function () {
         plane2D.position.x -= 0.01;
         
         scene2D.render();
+
         plane2D.dispose();
         cylinder2D.dispose();
     });
 
     window.addEventListener('resize', function () {
         engine3D.resize();
+        engine3D.resize();
     });
 
     window.addEventListener("keydown", function(evt) {
-        movementForKeycode[evt.keyCode] = 0.02;
+        movementForKeycode3D[evt.keyCode] = 0.02;
+        movementForKeycode2D[evt.keyCode] = 0.1;
     });
     window.addEventListener("keyup", function(evt) {
-        movementForKeycode[evt.keyCode] = 0;
+        movementForKeycode3D[evt.keyCode] = 0;
+        movementForKeycode2D[evt.keyCode] = 0;
     });
 };
