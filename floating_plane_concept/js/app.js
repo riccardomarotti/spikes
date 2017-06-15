@@ -102,7 +102,7 @@ var createScene = function () {
 
     window.addEventListener('resize', function () {
         engine3D.resize();
-        engine3D.resize();
+        engine2D.resize();
     });
 
     window.addEventListener("keydown", function(evt) {
