@@ -16,7 +16,7 @@ var createScene = function () {
 
     var camera3D = new BABYLON.ArcRotateCamera("ArcRotateCamera",
                                                 -0.7,
-                                                0.8,
+                                                1,
                                                 10,
                                                 new BABYLON.Vector3(0, 0, 0),
                                                 scene3D);
@@ -27,6 +27,11 @@ var createScene = function () {
     light3D.intensity = 0.7;
 
     var cylinder3D = BABYLON.Mesh.CreateCylinder("cylinder", 6, 2, 2, 50, 1, scene3D, false);
+    var cylinder3DMaterial = new BABYLON.StandardMaterial("cylinder3DColor", scene3D);
+    var cylinderColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+    cylinder3DMaterial.diffuseColor = cylinder3DMaterial;
+    cylinder3D.material = cylinder3DMaterial;
+
     var plane3D = BABYLON.MeshBuilder.CreateBox("box", {size: 5, width: 0.01}, scene3D);
 
 
@@ -41,13 +46,10 @@ var createScene = function () {
     var engine2D = new BABYLON.Engine(canvas2D, true);
     var scene2D = new BABYLON.Scene(engine2D);
 
-    var light2D = new BABYLON.HemisphericLight("light2D", new BABYLON.Vector3(1, 1, 1), scene2D);
-    light2D.intensity = 1;
-
     var player2D = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene2D);
     var playerMaterial = new BABYLON.StandardMaterial("playerMaterial", scene2D);
     var playerColor = new BABYLON.Color3(1, 0.3, 0.4);
-    playerMaterial.diffuseColor = playerColor;
+    playerMaterial.emissiveColor = playerColor;
     player2D.material = playerMaterial;
     player2D.rotation.z = Math.PI/2;
     player2D.position.z = -2;
@@ -74,15 +76,15 @@ var createScene = function () {
 
     var target2D = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
     var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene2D);
-    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.5);
-    targetMaterial.diffuseColor = targetColor;
+    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.7);
+    targetMaterial.emissiveColor = targetColor;
     target2D.material = targetMaterial;
     target2D.rotation.z = Math.PI/2;
     target2D.position.z = 1.75;
 
     var target3D = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene3D);
     var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene3D);
-    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.5);
+    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.7);
     targetMaterial.diffuseColor = targetColor;
     target3D.material = targetMaterial;
     target3D.rotation.z = Math.PI/2;
@@ -112,7 +114,7 @@ var createScene = function () {
         }
 
         var planeMaterial2D = new BABYLON.StandardMaterial("plane2DMaterial", scene2D);
-        planeMaterial2D.diffuseColor = new BABYLON.Color3(0.5, 1, 1);
+        planeMaterial2D.emissiveColor = new BABYLON.Color3(0.3, 0.7, 0.7);
         var plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
         plane2D.position.x -= 0.01;
 
