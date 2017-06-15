@@ -45,7 +45,7 @@ var createScene = function () {
     light2D.intensity = 1;
 
     var player = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene2D);
-    var playerMaterial = new BABYLON.StandardMaterial("playerColor", scene2D);
+    var playerMaterial = new BABYLON.StandardMaterial("playerMaterial", scene2D);
     var playerColor = new BABYLON.Color3(1, 0.3, 0.4);
     playerMaterial.diffuseColor = playerColor;
     player.material = playerMaterial;
@@ -60,11 +60,19 @@ var createScene = function () {
                                                 scene2D
                                                );
 
-    camera2D.attachControl(canvas2D, true, true , true);
-    camera2D.inputs.remove(camera2D.inputs.attached.keyboard);
+    // camera2D.attachControl(canvas2D, true, true , true);
+    // camera2D.inputs.remove(camera2D.inputs.attached.keyboard);
     engine3D.runRenderLoop(function () {
         scene3D.render();
     });
+
+    var target = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
+    var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene2D);
+    var targetColor = new BABYLON.Color3(0.4, 1, 0.4);
+    targetMaterial.diffuseColor = targetColor;
+    target.material = targetMaterial;
+    target.rotation.z = Math.PI/2;
+    target.position.z = 1.75;
 
     var cylynder2DMaterial = new BABYLON.StandardMaterial("mat", scene2D);
     cylynder2DMaterial.specularColor = new BABYLON.Vector3(0,0,0);
@@ -72,10 +80,12 @@ var createScene = function () {
     scene3D.registerAfterRender(function () {
         plane3D.position.x -= movementForKeycode3D[KEY_A] || 0;
         player.position.x -= movementForKeycode3D[KEY_A] || 0;
+        target.position.x -= movementForKeycode3D[KEY_A] || 0;
         camera2D.target.x -= movementForKeycode3D[KEY_A] || 0;
 
         plane3D.position.x += movementForKeycode3D[KEY_D] || 0;
         player.position.x += movementForKeycode3D[KEY_D] || 0;
+        target.position.x += movementForKeycode3D[KEY_D] || 0;
         camera2D.target.x += movementForKeycode3D[KEY_D] || 0;
 
         var plane2Dtemp = BABYLON.CSG.FromMesh(plane3D);
