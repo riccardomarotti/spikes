@@ -70,8 +70,8 @@ var createScene = function () {
         
         cylinder2D = intersection.toMesh("intersection", blackMaterial, scene2D);
         var planeMaterial2D = new BABYLON.StandardMaterial("transparent", scene2D);
-        planeMaterial2D.alpha = 0.1;
         plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
+        plane2D.position.x -= 0.01;
         
         scene2D.render();
     });
