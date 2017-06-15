@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Babylon.js Multi View Spike</title>
+    <script src="js/babylon.2.5.js"></script>
+    
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #canvas3D {
+            width: 50%;
+            height: 100%;
+            touch-action: none;
+            float: left;
+        }
+        #canvas2D {
+            width: 50%;
+            height: 100%;
+            touch-action: none;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas3D"></canvas>
+    <canvas id="canvas2D"></canvas>
+    <script src="js/app.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function(){
+            createScene();
+        });
+    </script>
+</body>
+</html>⏎            
