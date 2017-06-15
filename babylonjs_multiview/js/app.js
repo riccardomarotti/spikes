@@ -12,9 +12,7 @@ var createScene = function () {
     var light3D = new BABYLON.HemisphericLight("light3D", new BABYLON.Vector3(1, 0, 0), scene3D);
     light3D.intensity = 0.7;
 
-    // var sphere3D = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene3D);
-    var sphere3D = BABYLON.Mesh.CreateCylinder("cylinder", 5, 2, 2, 50, 1, scene3D, false);
-    // var plane3D = BABYLON.Mesh.CreatePlane("transparentPlane", 5, scene3D, true, 0);
+    var cylinder3D = BABYLON.Mesh.CreateCylinder("cylinder", 6, 2, 2, 50, 1, scene3D, false);
     var plane3D = BABYLON.MeshBuilder.CreateBox("box", {size: 5, width: 0.1}, scene3D);
     plane3D.backFaceCulling = false;
 
@@ -45,32 +43,32 @@ var createScene = function () {
     });
 
     var plane2D = null;
-    var sphere2D = null;
+    var cylinder2D = null;
     var blackMaterial = new BABYLON.StandardMaterial("mat", scene2D);
     blackMaterial.specularColor = new BABYLON.Vector3(0,0,0);
     scene3D.registerAfterRender(function () {
         if(plane2D) {
             plane2D.dispose();
         }
-        if(sphere2D) {
-            sphere2D.dispose();
+        if(cylinder2D) {
+            cylinder2D.dispose();
         }
 
         if(keys[65]) {
-            plane3D.position.x -= 0.05;
-            camera2D.target.x -= 0.05;
+            plane3D.position.x -= 0.02;
+            camera2D.target.x -= 0.02;
         }
 
         if(keys[68]) {
-            plane3D.position.x += 0.05;
-            camera2D.target.x += 0.05;
+            plane3D.position.x += 0.02;
+            camera2D.target.x += 0.02;
         }
 
         var plane2Dtemp = BABYLON.CSG.FromMesh(plane3D);
-        var sphere2Dtemp = BABYLON.CSG.FromMesh(sphere3D);
-        var intersection =  plane2Dtemp.intersect(sphere2Dtemp);
+        var cylinder2Dtemp = BABYLON.CSG.FromMesh(cylinder3D);
+        var intersection =  plane2Dtemp.intersect(cylinder2Dtemp);
         
-        sphere2D = intersection.toMesh("intersection", blackMaterial, scene2D);
+        cylinder2D = intersection.toMesh("intersection", blackMaterial, scene2D);
         var planeMaterial2D = new BABYLON.StandardMaterial("transparent", scene2D);
         planeMaterial2D.alpha = 0.1;
         plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
