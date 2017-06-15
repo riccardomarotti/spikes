@@ -44,13 +44,21 @@ var createScene = function () {
     var light2D = new BABYLON.HemisphericLight("light2D", new BABYLON.Vector3(1, 1, 1), scene2D);
     light2D.intensity = 1;
 
-    var player = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene2D);
+    var player2D = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene2D);
     var playerMaterial = new BABYLON.StandardMaterial("playerMaterial", scene2D);
     var playerColor = new BABYLON.Color3(1, 0.3, 0.4);
     playerMaterial.diffuseColor = playerColor;
-    player.material = playerMaterial;
-    player.rotation.z = Math.PI/2;
-    player.position.z = -2;
+    player2D.material = playerMaterial;
+    player2D.rotation.z = Math.PI/2;
+    player2D.position.z = -2;
+
+    var player3D = new BABYLON.Mesh.CreateCylinder("player", 0.1, 0.5, 0.5, 50, 1, scene3D);
+    var playerMaterial = new BABYLON.StandardMaterial("playerMaterial", scene3D);
+    var playerColor = new BABYLON.Color3(1, 0.3, 0.4);
+    playerMaterial.diffuseColor = playerColor;
+    player3D.material = playerMaterial;
+    player3D.rotation.z = Math.PI/2;
+    player3D.position.z = -2;
 
     var camera2D = new BABYLON.ArcRotateCamera("ArcRotateCamera",
                                                 0,
@@ -60,32 +68,38 @@ var createScene = function () {
                                                 scene2D
                                                );
 
-    // camera2D.attachControl(canvas2D, true, true , true);
-    // camera2D.inputs.remove(camera2D.inputs.attached.keyboard);
     engine3D.runRenderLoop(function () {
         scene3D.render();
     });
 
-    var target = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
+    var target2D = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene2D);
     var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene2D);
     var targetColor = new BABYLON.Color3(0.2, 0.8, 0.5);
     targetMaterial.diffuseColor = targetColor;
-    target.material = targetMaterial;
-    target.rotation.z = Math.PI/2;
-    target.position.z = 1.75;
+    target2D.material = targetMaterial;
+    target2D.rotation.z = Math.PI/2;
+    target2D.position.z = 1.75;
+
+    var target3D = BABYLON.Mesh.CreateTorus("target", 1, 0.1, 50, scene3D);
+    var targetMaterial = new BABYLON.StandardMaterial("targetMaterial", scene3D);
+    var targetColor = new BABYLON.Color3(0.2, 0.8, 0.5);
+    targetMaterial.diffuseColor = targetColor;
+    target3D.material = targetMaterial;
+    target3D.rotation.z = Math.PI/2;
+    target3D.position.z = 1.75;
 
     var cylynder2DMaterial = new BABYLON.StandardMaterial("mat", scene2D);
     cylynder2DMaterial.specularColor = new BABYLON.Vector3(0,0,0);
 
     scene3D.registerAfterRender(function () {
         plane3D.position.x -= movementForKeycode3D[KEY_A] || 0;
-        player.position.x -= movementForKeycode3D[KEY_A] || 0;
-        target.position.x -= movementForKeycode3D[KEY_A] || 0;
+        player2D.position.x -= movementForKeycode3D[KEY_A] || 0;
+        target2D.position.x -= movementForKeycode3D[KEY_A] || 0;
         camera2D.target.x -= movementForKeycode3D[KEY_A] || 0;
 
         plane3D.position.x += movementForKeycode3D[KEY_D] || 0;
-        player.position.x += movementForKeycode3D[KEY_D] || 0;
-        target.position.x += movementForKeycode3D[KEY_D] || 0;
+        player2D.position.x += movementForKeycode3D[KEY_D] || 0;
+        target2D.position.x += movementForKeycode3D[KEY_D] || 0;
         camera2D.target.x += movementForKeycode3D[KEY_D] || 0;
 
         var plane2Dtemp = BABYLON.CSG.FromMesh(plane3D);
@@ -102,19 +116,22 @@ var createScene = function () {
         var plane2D = plane2Dtemp.toMesh("plane", planeMaterial2D, scene2D);
         plane2D.position.x -= 0.01;
 
-        player.position.z -= movementForKeycode2D[KEY_LEFT] || 0;
-        player.position.y -= movementForKeycode2D[KEY_DOWN] || 0, 0;
-        player.position.z += movementForKeycode2D[KEY_RIGHT] || 0;
-        player.position.y += movementForKeycode2D[KEY_UP] || 0;
+        player2D.position.z -= movementForKeycode2D[KEY_LEFT] || 0;
+        player2D.position.y -= movementForKeycode2D[KEY_DOWN] || 0, 0;
+        player2D.position.z += movementForKeycode2D[KEY_RIGHT] || 0;
+        player2D.position.y += movementForKeycode2D[KEY_UP] || 0;
 
-        if(cylinder2D && cylinder2D.intersectsMesh(player, false)) {
-            player.position.z = -2;
-            player.position.y = 0;
+        if(cylinder2D && cylinder2D.intersectsMesh(player2D, false)) {
+            player2D.position.z = -2;
+            player2D.position.y = 0;
         }
 
-        if(player.intersectsPoint(target.position)) {
+        if(player2D.intersectsPoint(target2D.position)) {
             engine3D.stopRenderLoop();
         }
+
+        player3D.position = player2D.position;
+        target3D.position = target2D.position;
 
         scene2D.render();
 
